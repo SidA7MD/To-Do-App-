@@ -1,7 +1,6 @@
 import Task from "../models/Task.model.js";
 
-
-export const GetAllTaskes =  async (req, res) => {
+export const GetAllTaskes = async (req, res) => {
   try {
     const tasks = await Task.find();
     res.status(200).json(tasks);
@@ -9,7 +8,18 @@ export const GetAllTaskes =  async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Failed to save task" });
   }
-}
+};
+
+export const GetTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await Task.findById(id);
+    res.status(200).json(task);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to save task" });
+  }
+};
 
 export const AddTask = async (req, res) => {
   try {
@@ -20,9 +30,9 @@ export const AddTask = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Failed to save task" });
   }
-}
+};
 
-export const UpdateTask =  async (req, res) => {
+export const UpdateTask = async (req, res) => {
   try {
     const data = req.body;
     const { id } = req.params;
@@ -39,7 +49,31 @@ export const UpdateTask =  async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Failed to Update task" });
   }
-}
+};
+
+
+
+export const Taskfinished = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { finished: true },  // set finished to true
+      { new: true }         // return the updated document
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update task" });
+  }
+};
+
 
 export const DeleteTask = async (req, res) => {
   try {
@@ -50,4 +84,4 @@ export const DeleteTask = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Failed to Update task" });
   }
-}
+};
