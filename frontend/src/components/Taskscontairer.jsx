@@ -28,7 +28,7 @@ const Taskcard = () => {
       <div className="space-y-3">
         {Tasks.length > 0 ? (
           Tasks.map((task) => (
-            <TaskCard key={task._id} task={task} />  
+            <TaskCard key={task._id} task={task} setTask={setTask} />  
           ))
         ) : (
           <p className="text-gray-500">Aucune tâche trouvée.</p>
